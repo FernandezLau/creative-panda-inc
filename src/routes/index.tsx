@@ -333,7 +333,7 @@ function Responsive() {
             </li>
           ))}
         </ul>
-        <blockquote data-reveal className="mt-10 border-l-4 border-accent pl-6 font-serif text-3xl italic leading-snug">
+        <blockquote data-reveal className="mt-10 border-l-4 border-accent pl-6 text-3xl font-light italic leading-snug">
           “We make the best output for your website!”
         </blockquote>
       </div>

@@ -32,3 +32,4 @@ use the editor.
 ## Project rules
 - Site content (projects, systems, clients, links) lives in `src/components/site/data.ts`; the page in `src/routes/index.tsx` only renders it — keeps copy edits in one place.
 - Portfolio images are hotlinked from mycreativepanda.com's WordPress uploads — they are the client's own assets and stay in sync with their portfolio.
+- Page motion runs through `src/components/site/use-site-animations.ts` (Anime.js, dynamically imported in an effect) driven by `data-hero`, `data-reveal`, `data-reveal-group`, `data-count`, `data-float` attributes — keeps animation out of SSR and out of the markup logic.
