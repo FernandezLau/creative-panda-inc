@@ -18,6 +18,7 @@ import {
   Mail,
 } from "lucide-react";
 
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import bambooHero from "@/assets/bamboo-hero.jpg";
 import {
@@ -166,7 +167,7 @@ function ClientMarquee() {
 
 /* ---------------- About ---------------- */
 
-function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: React.ReactNode; children?: React.ReactNode }) {
+function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: ReactNode; children?: ReactNode }) {
   return (
     <div className="max-w-3xl">
       <p className="eyebrow text-primary">{eyebrow}</p>
