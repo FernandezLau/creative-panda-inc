@@ -445,8 +445,8 @@ function Greetings() {
         </a>
         <ul className="flex flex-col divide-y divide-border rounded-3xl border border-border bg-card lg:col-span-2">
           {greetings.map((g, i) => (
-            <li key={g}>
-              <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group flex items-center justify-between gap-4 px-8 py-7 transition-colors hover:bg-secondary">
+            <li key={g} className="flex-1">
+              <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group flex h-full items-center justify-between gap-4 px-8 py-7 transition-colors first:rounded-t-3xl hover:bg-secondary">
                 <span className="flex items-baseline gap-4">
                   <span className="font-display text-sm text-muted-foreground">0{i + 1}</span>
                   <span className="font-display text-2xl font-bold">{g}</span>
