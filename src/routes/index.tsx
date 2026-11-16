@@ -22,6 +22,7 @@ import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import bambooHero from "@/assets/bamboo-hero.jpg";
 import {
+  GREETING_COVER,
   LOGO_URL,
   SALES_EMAIL,
   YOUTUBE_URL,
@@ -435,17 +436,28 @@ function Greetings() {
           </a>
         </Button>
       </div>
-      <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {greetings.map((g) => (
-          <a key={g.name} href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-3xl bg-forest">
-            <img src={g.img} alt={`${g.name} video greeting`} loading="lazy" className="aspect-[4/5] w-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-forest-overlay opacity-80" />
-            <span className="absolute left-5 top-5 grid h-12 w-12 place-items-center rounded-full bg-accent text-accent-foreground transition-transform group-hover:scale-110">
-              <Play className="h-5 w-5 fill-current" />
-            </span>
-            <h3 className="absolute bottom-5 left-5 right-5 text-xl font-bold text-forest-foreground">{g.name}</h3>
-          </a>
-        ))}
+      <div className="mt-16 grid items-stretch gap-6 lg:grid-cols-5">
+        <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-3xl bg-forest lg:col-span-3">
+          <img src={GREETING_COVER} alt="Collage of client video greetings" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <span className="absolute left-6 top-6 grid h-16 w-16 place-items-center rounded-full bg-accent text-accent-foreground shadow-lime transition-transform group-hover:scale-110">
+            <Play className="h-6 w-6 fill-current" />
+          </span>
+        </a>
+        <ul className="flex flex-col divide-y divide-border rounded-3xl border border-border bg-card lg:col-span-2">
+          {greetings.map((g, i) => (
+            <li key={g}>
+              <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group flex items-center justify-between gap-4 px-8 py-7 transition-colors hover:bg-secondary">
+                <span className="flex items-baseline gap-4">
+                  <span className="font-display text-sm text-muted-foreground">0{i + 1}</span>
+                  <span className="font-display text-2xl font-bold">{g}</span>
+                </span>
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-forest text-accent transition-transform group-hover:scale-110">
+                  <Play className="h-4 w-4 fill-current" />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

@@ -51,9 +51,6 @@ export const clients = [
   "Madridejos, Cebu",
 ];
 
-export const greetings = [
-  { name: "TESDA Region III", img: `${C}/74/1-74e1a99b.png` },
-  { name: "Arayat, Pampanga", img: `${C}/78/2-78e4268e.png` },
-  { name: "Talavera, Nueva Ecija", img: `${C}/f9/3-1-f9e3660a.png` },
-  { name: "Concepcion", img: `${C}/29/GREET1-1-2984601f.png` },
-];
+export const GREETING_COVER = `${C}/29/GREET1-1-2984601f.png`;
+
+export const greetings = ["TESDA Region III", "Arayat, Pampanga", "Talavera, Nueva Ecija", "Concepcion"];
