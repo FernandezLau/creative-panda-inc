@@ -23,7 +23,7 @@ export const projects = [
   { name: "Municipality of Alegria", place: "Cebu", url: "https://alegriacebu.gov.ph/", img: `${C}/0a/alegria2-0a94ca01.jpeg` },
   { name: "Municipality of Alcoy", place: "Cebu", url: "https://alcoycebu.gov.ph/", img: `${C}/5c/ALCOY-5c773a4f.png` },
   { name: "Municipality of Madridejos", place: "Cebu", url: "https://madridejoscebu.gov.ph/", img: `${C}/ba/MADRIDEJOS-ba112a8b.png` },
-];
+] as const;
 
 export const systems = [
   { name: "National Library of the Philippines", img: `${C}/64/nlp-1-64d49a9f.png` },
