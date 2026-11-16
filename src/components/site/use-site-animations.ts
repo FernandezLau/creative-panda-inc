@@ -47,8 +47,8 @@ export function useSiteAnimations(rootRef: RefObject<HTMLElement | null>) {
         running.push(tl);
 
         hero.querySelectorAll<HTMLElement>("[data-count]").forEach((el, i) => {
-          const end = Number(el.dataset.count);
-          const suffix = el.dataset.suffix ?? "";
+          const end = Number(el.dataset['count']);
+          const suffix = el.dataset['suffix'] ?? "";
           const counter = { v: end > 1000 ? end - 40 : 0 };
           running.push(
             animate(counter, {
