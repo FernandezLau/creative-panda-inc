@@ -18,9 +18,10 @@ import {
   Mail,
 } from "lucide-react";
 
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import bambooHero from "@/assets/bamboo-hero.jpg";
+import digitalHero from "@/assets/digital-hero.jpg";
+import { useSiteAnimations } from "@/components/site/use-site-animations";
 import {
   GREETING_COVER,
   LOGO_URL,
@@ -56,8 +57,10 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  useSiteAnimations(rootRef);
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div ref={rootRef} className="min-h-screen overflow-x-hidden">
       <Hero />
       <ClientMarquee />
       <About />
@@ -98,49 +101,89 @@ function Header() {
   );
 }
 
+const heroWords = ["We", "grow", "websites", "that"];
+const heroAccent = ["stand", "tall."];
+const floaters = [
+  "left-[8%] top-[30%]",
+  "left-[22%] top-[72%]",
+  "left-[46%] top-[18%]",
+  "left-[58%] top-[64%]",
+  "left-[72%] top-[34%]",
+  "left-[86%] top-[78%]",
+  "left-[92%] top-[22%]",
+];
+
 function Hero() {
   return (
-    <section className="relative isolate overflow-hidden bg-forest-deep text-forest-foreground">
+    <section data-hero-scope className="relative isolate overflow-hidden bg-forest-deep text-forest-foreground">
       <img
-        src={bambooHero}
+        data-hero-bg
+        src={digitalHero}
         alt=""
         width={1920}
         height={1088}
-        className="absolute inset-0 -z-20 h-full w-full object-cover opacity-70"
+        className="absolute inset-0 -z-20 h-full w-full object-cover opacity-80"
       />
       <div className="absolute inset-0 -z-10 bg-forest-fade" />
       <div className="absolute inset-x-0 bottom-0 -z-10 h-48 bg-forest-overlay" />
+      <div className="absolute inset-0 -z-10 bg-tech-grid opacity-40" aria-hidden />
+      {floaters.map((pos) => (
+        <span
+          key={pos}
+          data-float
+          aria-hidden
+          className={`pointer-events-none absolute -z-10 h-2 w-2 rounded-full bg-accent shadow-lime ${pos}`}
+        />
+      ))}
 
       <Header />
 
       <div className="mx-auto max-w-7xl px-6 pb-24 pt-16 lg:px-10 lg:pb-32 lg:pt-24">
-        <p className="eyebrow animate-rise text-accent">Web design & development · Est. 2006</p>
-        <h1 className="animate-rise mt-6 max-w-4xl text-5xl font-bold leading-[0.95] sm:text-7xl lg:text-[6.5rem]">
-          We grow websites that <span className="serif-accent text-accent">stand tall.</span>
+        <p data-hero="eyebrow" className="eyebrow text-accent">
+          Web design & development · Est. 2006
+        </p>
+        <h1 className="mt-6 max-w-4xl text-5xl font-bold leading-[1.02] sm:text-7xl lg:text-[5.75rem]">
+          {heroWords.map((w) => (
+            <span key={w} className="mr-[0.22em] inline-block overflow-hidden pb-[0.08em] align-bottom">
+              <span data-hero="word" className="inline-block">
+                {w}
+              </span>
+            </span>
+          ))}
+          {heroAccent.map((w) => (
+            <span key={w} className="mr-[0.22em] inline-block overflow-hidden pb-[0.08em] align-bottom">
+              <span data-hero="word" className="accent-italic inline-block text-accent">
+                {w}
+              </span>
+            </span>
+          ))}
         </h1>
-        <p className="animate-rise mt-8 max-w-xl text-lg leading-relaxed text-forest-foreground/80 [animation-delay:150ms]">
+        <p data-hero="copy" className="mt-8 max-w-xl text-lg leading-relaxed text-forest-foreground/80">
           A Philippine creative studio building responsive, user-friendly and SEO-ready websites and
           systems for municipalities, national agencies and growing businesses.
         </p>
-        <div className="animate-rise mt-10 flex flex-wrap gap-4 [animation-delay:250ms]">
-          <Button asChild variant="lime" size="xl">
+        <div className="mt-10 flex flex-wrap gap-4">
+          <Button asChild variant="lime" size="xl" data-hero="cta">
             <a href="#work">
               See our work <ArrowRight />
             </a>
           </Button>
-          <Button asChild variant="ghostLight" size="xl">
+          <Button asChild variant="ghostLight" size="xl" data-hero="cta">
             <a href="#about">Who are we?</a>
           </Button>
         </div>
 
         <dl className="mt-20 grid max-w-3xl grid-cols-3 gap-6 border-t border-forest-foreground/20 pt-8">
           {[
-            ["2006", "Founded"],
-            ["20 yrs", "Of crafting the web"],
-            ["100%", "Responsive builds"],
-          ].map(([v, l]) => (
-            <div key={l}>
-              <dt className="font-display text-3xl font-bold sm:text-4xl">{v}</dt>
+            { v: 2006, s: "", l: "Founded" },
+            { v: 20, s: " yrs", l: "Of crafting the web" },
+            { v: 100, s: "%", l: "Responsive builds" },
+          ].map(({ v, s, l }) => (
+            <div key={l} data-hero="stat">
+              <dt className="font-display text-3xl font-bold tabular-nums sm:text-4xl" data-count={v} data-suffix={s}>
+                {v}
+                {s}
+              </dt>
               <dd className="mt-1 text-sm text-forest-foreground/70">{l}</dd>
             </div>
           ))}
@@ -170,7 +213,7 @@ function ClientMarquee() {
 
 function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: ReactNode; children?: ReactNode }) {
   return (
-    <div className="max-w-3xl">
+    <div data-reveal className="max-w-3xl">
       <p className="eyebrow text-primary">{eyebrow}</p>
       <h2 className="mt-4 text-4xl font-bold leading-[1.02] sm:text-6xl">{title}</h2>
       {children && <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{children}</p>}
@@ -181,15 +224,15 @@ function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: Rea
 function About() {
   return (
     <section id="about" className="mx-auto grid max-w-7xl gap-16 px-6 py-28 lg:grid-cols-12 lg:px-10">
-      <div className="lg:col-span-5">
+      <div data-reveal className="lg:col-span-5">
         <p className="eyebrow text-primary">Who are we?</p>
         <h2 className="mt-4 text-4xl font-bold leading-[1.02] sm:text-6xl">
-          From business cards to <span className="serif-accent text-primary">city portals.</span>
+          From business cards to <span className="accent-italic text-primary">city portals.</span>
         </h2>
       </div>
-      <div className="space-y-6 text-lg leading-relaxed text-muted-foreground lg:col-span-7 lg:pt-10">
+      <div data-reveal-group className="space-y-6 text-lg leading-relaxed text-muted-foreground lg:col-span-7 lg:pt-10">
         <p className="font-display text-2xl font-medium leading-snug text-foreground">
-          <em className="serif-accent text-primary">My Creative Panda</em> was established in 2006.
+          <em className="accent-italic text-primary">My Creative Panda</em> was established in 2006.
         </p>
         <p>
           A dream that started by accepting small projects — logo designs, website templates, business
@@ -224,7 +267,7 @@ function Services() {
     <section id="services" className="bg-secondary py-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <SectionHead eyebrow="Services we offer" title={<>Where imagination takes <span className="serif-accent text-primary">vibrant form.</span></>}>
+          <SectionHead eyebrow="Services we offer" title={<>Where imagination takes <span className="accent-italic text-primary">vibrant form.</span></>}>
             Tailored services that turn your ideas into a digital home — welcome to endless creativity and
             limitless possibilities.
           </SectionHead>
@@ -235,7 +278,7 @@ function Services() {
           </Button>
         </div>
 
-        <div className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+        <div data-reveal-group className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {services.map(({ icon: Icon, title, body }, i) => (
             <article key={title} className="group relative bg-card p-8 transition-colors hover:bg-forest hover:text-forest-foreground lg:p-10">
               <span className="font-display text-sm font-semibold text-muted-foreground group-hover:text-accent">
@@ -262,7 +305,7 @@ function Responsive() {
   ];
   return (
     <section className="mx-auto grid max-w-7xl items-center gap-16 px-6 py-28 lg:grid-cols-2 lg:px-10">
-      <div className="relative">
+      <div data-reveal className="relative">
         <div className="absolute -left-6 -top-6 h-40 w-40 rounded-full bg-accent" aria-hidden />
         <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-card">
           <div className="flex items-center gap-1.5 border-b border-border px-4 py-3">
@@ -279,18 +322,18 @@ function Responsive() {
       </div>
 
       <div>
-        <SectionHead eyebrow="Built for every screen" title={<>Digital experiences that <span className="serif-accent text-primary">adapt to you.</span></>}>
+        <SectionHead eyebrow="Built for every screen" title={<>Digital experiences that <span className="accent-italic text-primary">adapt to you.</span></>}>
           From smartphones to desktops, every site we ship adapts flawlessly to the screen — easy
           navigation and visually stunning content, wherever your visitors are.
         </SectionHead>
-        <ul className="mt-10 grid gap-3 sm:grid-cols-3">
+        <ul data-reveal-group className="mt-10 grid gap-3 sm:grid-cols-3">
           {feats.map(({ icon: Icon, label }) => (
             <li key={label} className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-4 font-semibold">
               <Icon className="h-5 w-5 text-primary" /> {label}
             </li>
           ))}
         </ul>
-        <blockquote className="mt-10 border-l-4 border-accent pl-6 font-serif text-3xl italic leading-snug">
+        <blockquote data-reveal className="mt-10 border-l-4 border-accent pl-6 text-3xl font-light italic leading-snug">
           “We make the best output for your website!”
         </blockquote>
       </div>
@@ -306,10 +349,10 @@ function Work() {
     <section id="work" className="bg-forest-deep py-28 text-forest-foreground">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <div className="max-w-3xl">
+          <div data-reveal className="max-w-3xl">
             <p className="eyebrow text-accent">Latest website projects</p>
             <h2 className="mt-4 text-4xl font-bold leading-[1.02] sm:text-6xl">
-              Proudly powering towns <span className="serif-accent text-accent">across the islands.</span>
+              Proudly powering towns <span className="accent-italic text-accent">across the islands.</span>
             </h2>
           </div>
           <Button asChild variant="lime" size="xl">
@@ -319,8 +362,10 @@ function Work() {
           </Button>
         </div>
 
-        <ProjectCard p={featured} large />
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div data-reveal>
+          <ProjectCard p={featured} large />
+        </div>
+        <div data-reveal-group className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {rest.map((p) => (
             <ProjectCard key={p.name} p={p} />
           ))}
@@ -364,11 +409,11 @@ function ProjectCard({ p, large }: { p: (typeof projects)[number]; large?: boole
 function Systems() {
   return (
     <section id="systems" className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
-      <SectionHead eyebrow="Trusted partnerships" title={<>Systems that keep <span className="serif-accent text-primary">institutions running.</span></>}>
+      <SectionHead eyebrow="Trusted partnerships" title={<>Systems that keep <span className="accent-italic text-primary">institutions running.</span></>}>
         We proudly introduce the partners who have been instrumental in our journey and continue to
         contribute to our shared success.
       </SectionHead>
-      <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div data-reveal-group className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {systems.map((s) => (
           <figure key={s.name} className="group">
             <div className="overflow-hidden rounded-2xl border border-border bg-muted shadow-card">
@@ -400,11 +445,11 @@ function WhyUs() {
   return (
     <section className="bg-accent py-28 text-accent-foreground">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <p className="eyebrow">Why My Creative Panda</p>
-        <h2 className="mt-4 max-w-4xl text-4xl font-bold leading-[1.02] sm:text-6xl">
-          The myriad benefits of <span className="serif-accent">choosing the panda.</span>
+        <p data-reveal className="eyebrow">Why My Creative Panda</p>
+        <h2 data-reveal className="mt-4 max-w-4xl text-4xl font-bold leading-[1.02] sm:text-6xl">
+          The myriad benefits of <span className="accent-italic">choosing the panda.</span>
         </h2>
-        <div className="mt-16 grid gap-6 md:grid-cols-3">
+        <div data-reveal-group className="mt-16 grid gap-6 md:grid-cols-3">
           {items.map(({ icon: Icon, title, body }) => (
             <article key={title} className="rounded-3xl bg-background p-8 text-foreground shadow-lift">
               <span className="grid h-14 w-14 place-items-center rounded-2xl bg-forest text-accent">
@@ -426,7 +471,7 @@ function Greetings() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
       <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-        <SectionHead eyebrow="Greetings for our clients" title={<>Video greetings, <span className="serif-accent text-primary">brought to life.</span></>}>
+        <SectionHead eyebrow="Greetings for our clients" title={<>Video greetings, <span className="accent-italic text-primary">brought to life.</span></>}>
           A visual treat from the Creative Panda team, made for our esteemed clients to spark imagination
           and leave everyone inspired.
         </SectionHead>
@@ -436,7 +481,7 @@ function Greetings() {
           </a>
         </Button>
       </div>
-      <div className="mt-16 grid items-stretch gap-6 lg:grid-cols-5">
+      <div data-reveal-group className="mt-16 grid items-stretch gap-6 lg:grid-cols-5">
         <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-3xl bg-forest lg:col-span-3">
           <img src={GREETING_COVER} alt="Collage of client video greetings" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
           <span className="absolute left-6 top-6 grid h-16 w-16 place-items-center rounded-full bg-accent text-accent-foreground shadow-lime transition-transform group-hover:scale-110">
@@ -468,7 +513,7 @@ function Greetings() {
 function JoinAndSupport() {
   return (
     <section id="careers" className="mx-auto max-w-7xl px-6 pb-28 lg:px-10">
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div data-reveal-group className="grid gap-6 lg:grid-cols-2">
         <article className="flex flex-col justify-between rounded-[2rem] border border-border bg-secondary p-10 lg:p-14">
           <div>
             <p className="eyebrow text-primary">Careers</p>
@@ -519,7 +564,7 @@ function Footer() {
   return (
     <footer className="bg-forest-deep text-forest-foreground">
       <div className="mx-auto max-w-7xl px-6 pt-20 lg:px-10">
-        <p className="font-display text-[14vw] font-extrabold leading-none tracking-tighter text-forest-foreground/10 lg:text-[11rem]">
+        <p data-reveal className="font-display text-[14vw] font-extrabold leading-none tracking-tighter text-forest-foreground/10 lg:text-[11rem]">
           creative panda
         </p>
         <div className="flex flex-col gap-8 border-t border-forest-foreground/15 py-10 md:flex-row md:items-center md:justify-between">
