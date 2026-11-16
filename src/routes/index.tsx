@@ -402,9 +402,9 @@ function Services() {
           {services.map(({ icon: Icon, title, body }, i) => (
             <SpotlightCard
               key={title}
+              decor={<Corners />}
               className="rounded-2xl border border-forest-foreground/10 bg-forest/60 p-8 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lime lg:p-10"
             >
-              <Corners />
               <div className="flex items-start justify-between">
                 <span className="grid h-14 w-14 place-items-center rounded-xl bg-accent/10 text-accent ring-1 ring-accent/30 transition-colors duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
                   <Icon className="h-6 w-6" strokeWidth={1.8} />
@@ -608,8 +608,7 @@ function WhyUs() {
         </h2>
         <div data-reveal-group className="mt-16 grid gap-6 md:grid-cols-3">
           {items.map(({ icon: Icon, title, body }, i) => (
-            <SpotlightCard key={title} className="rounded-3xl bg-forest-deep p-8 text-forest-foreground shadow-lift transition-transform duration-300 hover:-translate-y-1.5">
-              <Corners />
+            <SpotlightCard key={title} decor={<Corners />} className="rounded-3xl bg-forest-deep p-8 text-forest-foreground shadow-lift transition-transform duration-300 hover:-translate-y-1.5">
               <div className="flex items-center justify-between">
                 <span className="grid h-14 w-14 place-items-center rounded-2xl bg-accent text-accent-foreground shadow-lime">
                   <Icon className="h-6 w-6" />
