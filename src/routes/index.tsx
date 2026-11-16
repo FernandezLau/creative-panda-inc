@@ -216,7 +216,7 @@ function ClientMarquee() {
 
 /* ---------------- Shared bits ---------------- */
 
-function TechTag({ children, index, dark }: { children: ReactNode; index?: string; dark?: boolean }) {
+function TechTag({ children, index, dark }: { children: ReactNode; index?: string | undefined; dark?: boolean | undefined }) {
   return (
     <p
       className={`eyebrow inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 ${
