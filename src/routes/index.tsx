@@ -16,12 +16,16 @@ import {
   Wallet,
   Play,
   Mail,
+  Lock,
+  Terminal,
+  Cpu,
 } from "lucide-react";
 
 import { useRef, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import digitalHero from "@/assets/digital-hero.jpg";
 import { useSiteAnimations } from "@/components/site/use-site-animations";
+import { SpotlightCard } from "@/components/site/spotlight-card";
 import {
   GREETING_COVER,
   LOGO_URL,
@@ -196,12 +200,13 @@ function Hero() {
 function ClientMarquee() {
   const row = [...clients, ...clients];
   return (
-    <div className="border-b border-border bg-accent py-5 text-accent-foreground">
+    <div className="relative border-y border-accent/30 bg-forest py-5 text-forest-foreground">
+      <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-accent/60" />
       <div className="flex w-max animate-marquee gap-10 whitespace-nowrap">
         {row.map((c, i) => (
           <span key={i} className="flex items-center gap-10 font-display text-lg font-semibold">
             {c}
-            <span aria-hidden className="h-2 w-2 rounded-full bg-accent-foreground" />
+            <span aria-hidden className="h-2 w-2 rotate-45 bg-accent shadow-lime" />
           </span>
         ))}
       </div>
@@ -209,43 +214,155 @@ function ClientMarquee() {
   );
 }
 
-/* ---------------- About ---------------- */
+/* ---------------- Shared bits ---------------- */
 
-function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: ReactNode; children?: ReactNode }) {
+function TechTag({ children, index, dark }: { children: ReactNode; index?: string; dark?: boolean }) {
+  return (
+    <p
+      className={`eyebrow inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 ${
+        dark ? "border-accent/30 bg-accent/10 text-accent" : "border-primary/25 bg-primary/10 text-primary"
+      }`}
+    >
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inset-0 animate-ping rounded-full bg-current opacity-60" />
+        <span className="relative h-2 w-2 rounded-full bg-current" />
+      </span>
+      {index && <span className="opacity-60">{index} /</span>}
+      {children}
+    </p>
+  );
+}
+
+function SectionHead({
+  eyebrow,
+  index,
+  title,
+  dark,
+  children,
+}: {
+  eyebrow: string;
+  index?: string;
+  title: ReactNode;
+  dark?: boolean;
+  children?: ReactNode;
+}) {
   return (
     <div data-reveal className="max-w-3xl">
-      <p className="eyebrow text-primary">{eyebrow}</p>
-      <h2 className="mt-4 text-4xl font-bold leading-[1.02] sm:text-6xl">{title}</h2>
-      {children && <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{children}</p>}
+      <TechTag index={index} dark={dark}>
+        {eyebrow}
+      </TechTag>
+      <h2 className="mt-6 text-4xl font-bold leading-[1.02] sm:text-6xl">{title}</h2>
+      {children && (
+        <p className={`mt-6 text-lg leading-relaxed ${dark ? "text-forest-foreground/70" : "text-muted-foreground"}`}>
+          {children}
+        </p>
+      )}
     </div>
   );
 }
 
+function Corners() {
+  const base = "pointer-events-none absolute h-4 w-4 border-accent transition-all duration-300 group-hover:h-6 group-hover:w-6";
+  return (
+    <>
+      <span aria-hidden className={`${base} left-3 top-3 border-l-2 border-t-2`} />
+      <span aria-hidden className={`${base} right-3 top-3 border-r-2 border-t-2`} />
+      <span aria-hidden className={`${base} bottom-3 left-3 border-b-2 border-l-2`} />
+      <span aria-hidden className={`${base} bottom-3 right-3 border-b-2 border-r-2`} />
+    </>
+  );
+}
+
+function BrowserBar({ url, dark }: { url: string; dark?: boolean }) {
+  return (
+    <div
+      className={`flex items-center gap-1.5 border-b px-4 py-2.5 ${
+        dark ? "border-forest-foreground/10 bg-forest-deep/80" : "border-border bg-card"
+      }`}
+    >
+      <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
+      <span className="h-2.5 w-2.5 rounded-full bg-chart-4/80" />
+      <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+      <span
+        className={`ml-3 flex min-w-0 items-center gap-1.5 truncate rounded-full px-3 py-0.5 text-xs ${
+          dark ? "bg-forest-foreground/10 text-forest-foreground/60" : "bg-muted text-muted-foreground"
+        }`}
+      >
+        <Lock className="h-3 w-3 shrink-0" />
+        <span className="truncate">{url}</span>
+      </span>
+    </div>
+  );
+}
+
+const host = (u: string) => u.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+/* ---------------- About ---------------- */
+
 function About() {
   return (
-    <section id="about" className="mx-auto grid max-w-7xl gap-16 px-6 py-28 lg:grid-cols-12 lg:px-10">
-      <div data-reveal className="lg:col-span-5">
-        <p className="eyebrow text-primary">Who are we?</p>
-        <h2 className="mt-4 text-4xl font-bold leading-[1.02] sm:text-6xl">
-          From business cards to <span className="accent-italic text-primary">city portals.</span>
-        </h2>
-      </div>
-      <div data-reveal-group className="space-y-6 text-lg leading-relaxed text-muted-foreground lg:col-span-7 lg:pt-10">
-        <p className="font-display text-2xl font-medium leading-snug text-foreground">
-          <em className="accent-italic text-primary">My Creative Panda</em> was established in 2006.
-        </p>
-        <p>
-          A dream that started by accepting small projects — logo designs, website templates, business
-          cards, flyers, postcards. One thing led to the other, and we realised we were taking on bigger
-          projects.
-        </p>
-        <p>
-          Our clients were so happy with our service that they recommended us to their friends. That's
-          what keeps us pursuing what we wanted in the first place.
-        </p>
-        <a href="https://mycreativepanda.com/about-us/" className="inline-flex items-center gap-2 font-semibold text-foreground underline decoration-accent decoration-4 underline-offset-8 hover:text-primary">
-          Read our story <ArrowUpRight className="h-4 w-4" />
-        </a>
+    <section id="about" className="relative isolate overflow-hidden">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-circuit-light" />
+      <div className="mx-auto grid max-w-7xl gap-16 px-6 py-28 lg:grid-cols-12 lg:px-10">
+        <div className="lg:col-span-5">
+          <div data-reveal>
+            <TechTag index="01">Who are we?</TechTag>
+            <h2 className="mt-6 text-4xl font-bold leading-[1.02] sm:text-6xl">
+              From business cards to <span className="accent-italic text-primary">city portals.</span>
+            </h2>
+          </div>
+
+          <div data-reveal className="mt-10 overflow-hidden rounded-2xl border border-forest bg-forest-deep text-forest-foreground shadow-lift">
+            <div className="flex items-center gap-1.5 border-b border-forest-foreground/10 px-4 py-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
+              <span className="h-2.5 w-2.5 rounded-full bg-chart-4/80" />
+              <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+              <span className="ml-3 flex items-center gap-1.5 text-xs text-forest-foreground/60">
+                <Terminal className="h-3.5 w-3.5" /> panda.config
+              </span>
+            </div>
+            <div data-reveal-group className="space-y-1.5 p-6 text-sm leading-relaxed sm:text-base">
+              <p>
+                <span className="text-accent">const</span> panda = {"{"}
+              </p>
+              <p className="pl-6">
+                founded: <span className="text-accent">2006</span>,
+              </p>
+              <p className="pl-6">
+                home: <span className="text-chart-4">"Philippines"</span>,
+              </p>
+              <p className="pl-6">
+                builds: [<span className="text-chart-4">"websites"</span>, <span className="text-chart-4">"portals"</span>,{" "}
+                <span className="text-chart-4">"systems"</span>],
+              </p>
+              <p className="pl-6">
+                clients: <span className="text-chart-4">"happy"</span>,
+              </p>
+              <p>
+                {"}"}
+                <span aria-hidden className="ml-1 inline-block h-4 w-2 animate-blink bg-accent align-middle" />
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div data-reveal-group className="space-y-6 text-lg leading-relaxed text-muted-foreground lg:col-span-7 lg:pt-20">
+          <p className="font-display text-2xl font-medium leading-snug text-foreground">
+            <em className="accent-italic text-primary">My Creative Panda</em> was established in 2006.
+          </p>
+          <p>
+            A dream that started by accepting small projects — logo designs, website templates, business
+            cards, flyers, postcards. One thing led to the other, and we realised we were taking on bigger
+            projects.
+          </p>
+          <p>
+            Our clients were so happy with our service that they recommended us to their friends. That's
+            what keeps us pursuing what we wanted in the first place.
+          </p>
+          <a href="https://mycreativepanda.com/about-us/" className="inline-flex items-center gap-2 font-semibold text-foreground underline decoration-accent decoration-4 underline-offset-8 hover:text-primary">
+            Read our story <ArrowUpRight className="h-4 w-4" />
+          </a>
+        </div>
       </div>
     </section>
   );
@@ -264,30 +381,44 @@ const services = [
 
 function Services() {
   return (
-    <section id="services" className="bg-secondary py-28">
+    <section id="services" className="relative isolate overflow-hidden bg-forest-deep py-28 text-forest-foreground">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-tech-grid-fine" />
+      <div aria-hidden className="absolute -right-40 top-10 -z-10 h-[28rem] w-[28rem] rounded-full bg-accent/15 blur-3xl" />
+      <div aria-hidden className="absolute -left-40 bottom-0 -z-10 h-80 w-80 rounded-full bg-primary/30 blur-3xl" />
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <SectionHead eyebrow="Services we offer" title={<>Where imagination takes <span className="accent-italic text-primary">vibrant form.</span></>}>
+          <SectionHead dark index="02" eyebrow="Services we offer" title={<>Where imagination takes <span className="accent-italic text-accent text-glow">vibrant form.</span></>}>
             Tailored services that turn your ideas into a digital home — welcome to endless creativity and
             limitless possibilities.
           </SectionHead>
-          <Button asChild variant="ink" size="xl">
+          <Button asChild variant="lime" size="xl">
             <a href="https://mycreativepanda.com/services/">
               All services <ArrowRight />
             </a>
           </Button>
         </div>
 
-        <div data-reveal-group className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+        <div data-reveal-group className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map(({ icon: Icon, title, body }, i) => (
-            <article key={title} className="group relative bg-card p-8 transition-colors hover:bg-forest hover:text-forest-foreground lg:p-10">
-              <span className="font-display text-sm font-semibold text-muted-foreground group-hover:text-accent">
-                0{i + 1}
-              </span>
-              <Icon className="mt-8 h-9 w-9 text-primary transition-colors group-hover:text-accent" strokeWidth={1.6} />
-              <h3 className="mt-6 text-2xl font-bold">{title}</h3>
-              <p className="mt-3 text-muted-foreground group-hover:text-forest-foreground/75">{body}</p>
-            </article>
+            <SpotlightCard
+              key={title}
+              className="rounded-2xl border border-forest-foreground/10 bg-forest/60 p-8 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lime lg:p-10"
+            >
+              <Corners />
+              <div className="flex items-start justify-between">
+                <span className="grid h-14 w-14 place-items-center rounded-xl bg-accent/10 text-accent ring-1 ring-accent/30 transition-colors duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
+                  <Icon className="h-6 w-6" strokeWidth={1.8} />
+                </span>
+                <span className="font-display text-sm font-semibold tabular-nums text-forest-foreground/40 group-hover:text-accent">
+                  [0{i + 1}]
+                </span>
+              </div>
+              <h3 className="mt-8 text-2xl font-bold">{title}</h3>
+              <p className="mt-3 text-forest-foreground/65">{body}</p>
+              <div className="mt-8 h-px w-full bg-forest-foreground/10">
+                <div className="h-px w-0 bg-accent transition-all duration-500 group-hover:w-full" />
+              </div>
+            </SpotlightCard>
           ))}
         </div>
       </div>
@@ -304,38 +435,50 @@ function Responsive() {
     { icon: TrendingUp, label: "SEO friendly" },
   ];
   return (
-    <section className="mx-auto grid max-w-7xl items-center gap-16 px-6 py-28 lg:grid-cols-2 lg:px-10">
-      <div data-reveal className="relative">
-        <div className="absolute -left-6 -top-6 h-40 w-40 rounded-full bg-accent" aria-hidden />
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-card">
-          <div className="flex items-center gap-1.5 border-b border-border px-4 py-3">
-            <span className="h-2.5 w-2.5 rounded-full bg-border" />
-            <span className="h-2.5 w-2.5 rounded-full bg-border" />
-            <span className="h-2.5 w-2.5 rounded-full bg-border" />
-            <span className="ml-3 truncate text-xs text-muted-foreground">talibon.gov.ph</span>
+    <section className="relative isolate overflow-hidden">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-circuit-light" />
+      <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 py-28 lg:grid-cols-2 lg:px-10">
+        <div data-reveal className="relative">
+          <div aria-hidden className="absolute -left-10 -top-10 h-56 w-56 animate-spin-slow rounded-full border-2 border-dashed border-primary/30" />
+          <div aria-hidden className="absolute -left-4 -top-4 h-44 w-44 rounded-full bg-accent/60 blur-2xl" />
+          <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-card">
+            <BrowserBar url="talibon.gov.ph" />
+            <div className="relative overflow-hidden">
+              <img src={projects[0].img} alt="Municipality of Talibon website" loading="lazy" className="aspect-[16/10] w-full object-cover object-top" />
+              <div aria-hidden className="absolute inset-x-0 top-0 h-1/6 animate-scan scan-beam" />
+            </div>
           </div>
-          <img src={projects[0].img} alt="Municipality of Talibon website" loading="lazy" className="aspect-[16/10] w-full object-cover object-top" />
+          <div className="absolute -bottom-10 right-6 w-32 overflow-hidden rounded-2xl border-4 border-foreground bg-card shadow-lift sm:w-40">
+            <img src={projects[4].img} alt="National Academy of Sports website on mobile" loading="lazy" className="aspect-[9/16] w-full object-cover object-left-top" />
+          </div>
+          <div className="absolute -left-4 bottom-8 flex items-center gap-2 rounded-full bg-forest-deep px-4 py-2 text-xs font-semibold text-forest-foreground shadow-lift">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inset-0 animate-ping rounded-full bg-accent" />
+              <span className="relative h-2 w-2 rounded-full bg-accent" />
+            </span>
+            Live · Mobile ready
+          </div>
         </div>
-        <div className="absolute -bottom-10 right-6 w-32 overflow-hidden rounded-2xl border-4 border-foreground bg-card shadow-lift sm:w-40">
-          <img src={projects[4].img} alt="National Academy of Sports website on mobile" loading="lazy" className="aspect-[9/16] w-full object-cover object-left-top" />
-        </div>
-      </div>
 
-      <div>
-        <SectionHead eyebrow="Built for every screen" title={<>Digital experiences that <span className="accent-italic text-primary">adapt to you.</span></>}>
-          From smartphones to desktops, every site we ship adapts flawlessly to the screen — easy
-          navigation and visually stunning content, wherever your visitors are.
-        </SectionHead>
-        <ul data-reveal-group className="mt-10 grid gap-3 sm:grid-cols-3">
-          {feats.map(({ icon: Icon, label }) => (
-            <li key={label} className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-4 font-semibold">
-              <Icon className="h-5 w-5 text-primary" /> {label}
-            </li>
-          ))}
-        </ul>
-        <blockquote data-reveal className="mt-10 border-l-4 border-accent pl-6 text-3xl font-light italic leading-snug">
-          “We make the best output for your website!”
-        </blockquote>
+        <div>
+          <SectionHead index="03" eyebrow="Built for every screen" title={<>Digital experiences that <span className="accent-italic text-primary">adapt to you.</span></>}>
+            From smartphones to desktops, every site we ship adapts flawlessly to the screen — easy
+            navigation and visually stunning content, wherever your visitors are.
+          </SectionHead>
+          <ul data-reveal-group className="mt-10 grid gap-3 sm:grid-cols-3">
+            {feats.map(({ icon: Icon, label }) => (
+              <li key={label} className="group flex flex-col gap-3 rounded-2xl border border-border bg-card px-4 py-5 font-semibold transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-card">
+                <span className="grid h-10 w-10 place-items-center rounded-lg bg-forest text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+                  <Icon className="h-5 w-5" />
+                </span>
+                {label}
+              </li>
+            ))}
+          </ul>
+          <blockquote data-reveal className="mt-10 border-l-4 border-accent pl-6 text-3xl font-light italic leading-snug">
+            “We make the best output for your website!”
+          </blockquote>
+        </div>
       </div>
     </section>
   );
@@ -346,15 +489,12 @@ function Responsive() {
 function Work() {
   const [featured, ...rest] = projects;
   return (
-    <section id="work" className="bg-forest-deep py-28 text-forest-foreground">
+    <section id="work" className="relative isolate overflow-hidden bg-forest-deep py-28 text-forest-foreground">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-tech-grid-fine" />
+      <div aria-hidden className="absolute left-1/2 top-0 -z-10 h-72 w-[48rem] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <div data-reveal className="max-w-3xl">
-            <p className="eyebrow text-accent">Latest website projects</p>
-            <h2 className="mt-4 text-4xl font-bold leading-[1.02] sm:text-6xl">
-              Proudly powering towns <span className="accent-italic text-accent">across the islands.</span>
-            </h2>
-          </div>
+          <SectionHead dark index="04" eyebrow="Latest website projects" title={<>Proudly powering towns <span className="accent-italic text-accent text-glow">across the islands.</span></>} />
           <Button asChild variant="lime" size="xl">
             <a href="https://mycreativepanda.com/portfolio/">
               See all portfolio <ArrowRight />
@@ -381,15 +521,17 @@ function ProjectCard({ p, large }: { p: (typeof projects)[number]; large?: boole
       href={p.url}
       target="_blank"
       rel="noreferrer"
-      className={`group block overflow-hidden rounded-3xl border border-forest-foreground/15 bg-forest transition-transform hover:-translate-y-1 ${large ? "mt-16" : ""}`}
+      className={`group block overflow-hidden rounded-2xl border border-forest-foreground/15 bg-forest transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-lime ${large ? "mt-16" : ""}`}
     >
-      <div className="overflow-hidden">
+      <BrowserBar url={host(p.url)} dark />
+      <div className="relative overflow-hidden">
         <img
           src={p.img}
           alt={`${p.name} website`}
           loading="lazy"
           className={`w-full object-cover object-top transition-transform duration-700 group-hover:scale-105 ${large ? "aspect-[21/9]" : "aspect-[16/10]"}`}
         />
+        <div aria-hidden className="absolute inset-x-0 top-0 h-1/4 scan-beam opacity-0 transition-opacity group-hover:animate-scan group-hover:opacity-100" />
       </div>
       <div className="flex items-center justify-between gap-4 p-5">
         <div>
@@ -408,27 +550,39 @@ function ProjectCard({ p, large }: { p: (typeof projects)[number]; large?: boole
 
 function Systems() {
   return (
-    <section id="systems" className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
-      <SectionHead eyebrow="Trusted partnerships" title={<>Systems that keep <span className="accent-italic text-primary">institutions running.</span></>}>
-        We proudly introduce the partners who have been instrumental in our journey and continue to
-        contribute to our shared success.
-      </SectionHead>
-      <div data-reveal-group className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {systems.map((s) => (
-          <figure key={s.name} className="group">
-            <div className="overflow-hidden rounded-2xl border border-border bg-muted shadow-card">
-              <img src={s.img} alt={`${s.name} system`} loading="lazy" className="aspect-[16/10] w-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
-            </div>
-            <figcaption className="mt-4 font-display text-lg font-semibold leading-tight">{s.name}</figcaption>
-          </figure>
-        ))}
-      </div>
-      <div className="mt-14">
-        <Button asChild variant="ink" size="xl">
-          <a href="https://mycreativepanda.com/portfolio/">
-            View all our partners <ArrowRight />
-          </a>
-        </Button>
+    <section id="systems" className="relative isolate overflow-hidden">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-circuit-light" />
+      <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
+        <SectionHead index="05" eyebrow="Trusted partnerships" title={<>Systems that keep <span className="accent-italic text-primary">institutions running.</span></>}>
+          We proudly introduce the partners who have been instrumental in our journey and continue to
+          contribute to our shared success.
+        </SectionHead>
+        <div data-reveal-group className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {systems.map((s, i) => (
+            <figure key={s.name} className="group overflow-hidden rounded-2xl border border-border bg-card shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40">
+              <div className="flex items-center justify-between border-b border-border px-4 py-2.5 text-xs font-semibold">
+                <span className="flex items-center gap-2 text-primary">
+                  <Cpu className="h-3.5 w-3.5" /> SYS-0{i + 1}
+                </span>
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Partner system
+                </span>
+              </div>
+              <div className="relative overflow-hidden bg-muted">
+                <img src={s.img} alt={`${s.name} system`} loading="lazy" className="aspect-[16/10] w-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+                <div aria-hidden className="absolute inset-0 bg-forest-deep/0 transition-colors duration-300 group-hover:bg-forest-deep/10" />
+              </div>
+              <figcaption className="p-5 font-display text-lg font-semibold leading-tight">{s.name}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <div className="mt-14">
+          <Button asChild variant="ink" size="xl">
+            <a href="https://mycreativepanda.com/portfolio/">
+              View all our partners <ArrowRight />
+            </a>
+          </Button>
+        </div>
       </div>
     </section>
   );
@@ -443,21 +597,28 @@ function WhyUs() {
     { icon: Wallet, title: "Affordable rates", body: "We keep our costs low and our talent high, so you pay for great results." },
   ];
   return (
-    <section className="bg-accent py-28 text-accent-foreground">
+    <section className="relative isolate overflow-hidden bg-accent py-28 text-accent-foreground">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-grid-ink" />
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <p data-reveal className="eyebrow">Why My Creative Panda</p>
-        <h2 data-reveal className="mt-4 max-w-4xl text-4xl font-bold leading-[1.02] sm:text-6xl">
+        <p data-reveal className="eyebrow inline-flex items-center gap-2.5 rounded-full border border-accent-foreground/25 px-3.5 py-1.5">
+          <span className="h-2 w-2 rounded-full bg-accent-foreground" /> 06 / Why My Creative Panda
+        </p>
+        <h2 data-reveal className="mt-6 max-w-4xl text-4xl font-bold leading-[1.02] sm:text-6xl">
           The myriad benefits of <span className="accent-italic">choosing the panda.</span>
         </h2>
         <div data-reveal-group className="mt-16 grid gap-6 md:grid-cols-3">
-          {items.map(({ icon: Icon, title, body }) => (
-            <article key={title} className="rounded-3xl bg-background p-8 text-foreground shadow-lift">
-              <span className="grid h-14 w-14 place-items-center rounded-2xl bg-forest text-accent">
-                <Icon className="h-6 w-6" />
-              </span>
+          {items.map(({ icon: Icon, title, body }, i) => (
+            <SpotlightCard key={title} className="rounded-3xl bg-forest-deep p-8 text-forest-foreground shadow-lift transition-transform duration-300 hover:-translate-y-1.5">
+              <Corners />
+              <div className="flex items-center justify-between">
+                <span className="grid h-14 w-14 place-items-center rounded-2xl bg-accent text-accent-foreground shadow-lime">
+                  <Icon className="h-6 w-6" />
+                </span>
+                <span className="text-outline font-display text-6xl font-extrabold leading-none">0{i + 1}</span>
+              </div>
               <h3 className="mt-8 text-2xl font-bold">{title}</h3>
-              <p className="mt-3 leading-relaxed text-muted-foreground">{body}</p>
-            </article>
+              <p className="mt-3 leading-relaxed text-forest-foreground/70">{body}</p>
+            </SpotlightCard>
           ))}
         </div>
       </div>
@@ -471,7 +632,7 @@ function Greetings() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
       <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-        <SectionHead eyebrow="Greetings for our clients" title={<>Video greetings, <span className="accent-italic text-primary">brought to life.</span></>}>
+        <SectionHead index="07" eyebrow="Greetings for our clients" title={<>Video greetings, <span className="accent-italic text-primary">brought to life.</span></>}>
           A visual treat from the Creative Panda team, made for our esteemed clients to spark imagination
           and leave everyone inspired.
         </SectionHead>
@@ -482,21 +643,25 @@ function Greetings() {
         </Button>
       </div>
       <div data-reveal-group className="mt-16 grid items-stretch gap-6 lg:grid-cols-5">
-        <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-3xl bg-forest lg:col-span-3">
+        <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-3xl bg-forest ring-1 ring-border transition-shadow hover:glow-ring lg:col-span-3">
           <img src={GREETING_COVER} alt="Collage of client video greetings" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
           <span className="absolute left-6 top-6 grid h-16 w-16 place-items-center rounded-full bg-accent text-accent-foreground shadow-lime transition-transform group-hover:scale-110">
-            <Play className="h-6 w-6 fill-current" />
+            <span aria-hidden className="absolute inset-0 animate-ping rounded-full bg-accent/50" />
+            <Play className="relative h-6 w-6 fill-current" />
+          </span>
+          <span className="absolute bottom-6 left-6 flex items-center gap-2 rounded-full bg-forest-deep/85 px-4 py-2 text-xs font-semibold text-forest-foreground backdrop-blur">
+            <span className="h-2 w-2 rounded-full bg-destructive" /> REC · Client greetings
           </span>
         </a>
-        <ul className="flex flex-col divide-y divide-border rounded-3xl border border-border bg-card lg:col-span-2">
+        <ul className="flex flex-col divide-y divide-border overflow-hidden rounded-3xl border border-border bg-card lg:col-span-2">
           {greetings.map((g, i) => (
             <li key={g} className="flex-1">
-              <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group flex h-full items-center justify-between gap-4 px-8 py-7 transition-colors first:rounded-t-3xl hover:bg-secondary">
+              <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group flex h-full items-center justify-between gap-4 px-8 py-7 transition-colors hover:bg-forest-deep hover:text-forest-foreground">
                 <span className="flex items-baseline gap-4">
-                  <span className="font-display text-sm text-muted-foreground">0{i + 1}</span>
+                  <span className="font-display text-sm text-muted-foreground group-hover:text-accent">0{i + 1}</span>
                   <span className="font-display text-2xl font-bold">{g}</span>
                 </span>
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-forest text-accent transition-transform group-hover:scale-110">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-forest text-accent transition-all group-hover:scale-110 group-hover:bg-accent group-hover:text-accent-foreground">
                   <Play className="h-4 w-4 fill-current" />
                 </span>
               </a>
@@ -514,10 +679,11 @@ function JoinAndSupport() {
   return (
     <section id="careers" className="mx-auto max-w-7xl px-6 pb-28 lg:px-10">
       <div data-reveal-group className="grid gap-6 lg:grid-cols-2">
-        <article className="flex flex-col justify-between rounded-[2rem] border border-border bg-secondary p-10 lg:p-14">
+        <article className="relative isolate flex flex-col justify-between overflow-hidden rounded-[2rem] border border-border bg-secondary p-10 lg:p-14">
+          <div aria-hidden className="absolute inset-0 -z-10 bg-circuit-light" />
           <div>
-            <p className="eyebrow text-primary">Careers</p>
-            <h3 className="mt-4 text-4xl font-bold">Join our community.</h3>
+            <TechTag index="08">Careers</TechTag>
+            <h3 className="mt-6 text-4xl font-bold">Join our community.</h3>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-muted-foreground">
               We'd love you to join our vibrant, imaginative community of developers and professionals.
               We believe in the power of creativity to produce outstanding work for our clients.
@@ -532,17 +698,18 @@ function JoinAndSupport() {
           </div>
         </article>
 
-        <article id="contact" className="relative flex flex-col justify-between overflow-hidden rounded-[2rem] bg-forest p-10 text-forest-foreground lg:p-14">
-          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-accent/20 blur-2xl" aria-hidden />
-          <div className="relative">
-            <p className="eyebrow text-accent">Support & projects</p>
-            <h3 className="mt-4 text-4xl font-bold">Looking for support?</h3>
+        <article id="contact" className="relative isolate flex flex-col justify-between overflow-hidden rounded-[2rem] bg-forest-deep p-10 text-forest-foreground ring-1 ring-accent/20 lg:p-14">
+          <div aria-hidden className="absolute inset-0 -z-10 bg-tech-grid-fine" />
+          <div aria-hidden className="absolute -right-20 -top-20 -z-10 h-72 w-72 rounded-full bg-accent/25 blur-3xl" />
+          <div>
+            <TechTag dark index="09">Support & projects</TechTag>
+            <h3 className="mt-6 text-4xl font-bold">Looking for support?</h3>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-forest-foreground/75">
               Reliable IT infrastructure is vital to your success. We work closely with you to design
               custom solutions that match your goals and boost efficiency.
             </p>
           </div>
-          <div className="relative mt-10 flex flex-wrap gap-4">
+          <div className="mt-10 flex flex-wrap gap-4">
             <Button asChild variant="lime" size="xl">
               <a href={`mailto:${SALES_EMAIL}`}>
                 <Mail /> {SALES_EMAIL}
@@ -560,14 +727,27 @@ function JoinAndSupport() {
 
 /* ---------------- Footer ---------------- */
 
+const Letters = ({ text, className }: { text: string; className: string }) => (
+  <span data-reveal-group className="block">
+    {Array.from(text).map((ch, i) => (
+      <span key={i} className={`inline-block ${className}`}>
+        {ch === " " ? "\u00A0" : ch}
+      </span>
+    ))}
+  </span>
+);
+
 function Footer() {
   return (
-    <footer className="bg-forest-deep text-forest-foreground">
+    <footer className="relative isolate overflow-hidden bg-forest-deep text-forest-foreground">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-tech-grid-fine" />
+      <div aria-hidden className="absolute bottom-24 left-1/2 -z-10 h-64 w-[60rem] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
       <div className="mx-auto max-w-7xl px-6 pt-20 lg:px-10">
-        <p data-reveal className="font-display text-[14vw] font-extrabold leading-none tracking-tighter text-forest-foreground/10 lg:text-[11rem]">
-          creative panda
+        <p aria-label="My Creative Panda" className="font-display text-[15vw] font-extrabold leading-[0.9] tracking-tighter lg:text-[10.5rem]">
+          <Letters text="My Creative" className="text-outline" />
+          <Letters text="Panda." className="text-accent text-glow" />
         </p>
-        <div className="flex flex-col gap-8 border-t border-forest-foreground/15 py-10 md:flex-row md:items-center md:justify-between">
+        <div className="mt-10 flex flex-col gap-8 border-t border-forest-foreground/15 py-10 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
             <img src={LOGO_URL} alt="" width={36} height={36} loading="lazy" className="h-9 w-9 rounded-full bg-forest-foreground p-0.5" />
             <span className="text-sm text-forest-foreground/70">
