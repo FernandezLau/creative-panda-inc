@@ -224,3 +224,94 @@
     animation: none;
   }
 }
+
+/* ---- Tech-solutions accents ---- */
+@utility bg-tech-grid-fine {
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--accent) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--accent) 9%, transparent) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 75%);
+}
+
+@utility bg-circuit-light {
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--primary) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--primary) 9%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at 80% 20%, black 5%, transparent 65%);
+}
+
+@utility bg-grid-ink {
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--accent-foreground) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--accent-foreground) 9%, transparent) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+@utility spotlight {
+  background-image: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, -20%),
+    color-mix(in oklab, var(--accent) 18%, transparent),
+    transparent 60%
+  );
+}
+
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+
+@utility text-glow {
+  text-shadow: 0 0 40px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+
+@utility glow-ring {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent) 45%, transparent),
+    0 0 48px -10px color-mix(in oklab, var(--accent) 70%, transparent);
+}
+
+@utility scan-beam {
+  background-image: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in oklab, var(--accent) 35%, transparent) 50%,
+    transparent
+  );
+}
+
+@utility animate-scan {
+  animation: scan 4s ease-in-out infinite;
+}
+
+@utility animate-blink {
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@utility animate-spin-slow {
+  animation: spin 24s linear infinite;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(700%);
+  }
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scan,
+  .animate-blink,
+  .animate-spin-slow {
+    animation: none;
+  }
+}
