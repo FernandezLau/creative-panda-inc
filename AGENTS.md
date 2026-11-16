@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+- Site content (projects, systems, clients, links) lives in `src/components/site/data.ts`; the page in `src/routes/index.tsx` only renders it — keeps copy edits in one place.
+- Portfolio images are hotlinked from mycreativepanda.com's WordPress uploads — they are the client's own assets and stay in sync with their portfolio.
