@@ -39,7 +39,7 @@ const careersQuery = queryOptions({
 
 const searchSchema = z.object({
   dept: z.string().regex(/^[a-z0-9-]{1,80}$/).optional().catch(undefined),
-  job: z.string().regex(/^\d{1,9}$/).optional().catch(undefined),
+  job: z.number().int().positive().max(999_999_999).optional().catch(undefined),
 });
 
 export const Route = createFileRoute("/careers")({
@@ -94,7 +94,7 @@ function CareersHero({ roles, teams }: { roles: number; teams: number }) {
         <div data-reveal>
           <TechTag dark>We're hiring</TechTag>
           <h1 className="mt-6 text-5xl font-bold leading-[0.98] tracking-tight sm:text-7xl">
-            Build the web <span className="accent-italic text-accent text-glow">with us.</span>
+            Build the web <span className="accent-italic block text-accent text-glow">with us.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest-foreground/75">
             We'd love you to join our vibrant, imaginative community of developers and professionals.
@@ -142,7 +142,7 @@ function Finder({ departments, positions, failed }: { departments: Department[];
   const panelRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
 
-  const position = job ? positions.find((p) => p.id === job) : undefined;
+  const position = job ? positions.find((p) => p.id === String(job)) : undefined;
   const department = departments.find((d) => d.slug === (position?.departmentSlug ?? dept));
   const step = position ? 3 : department ? 2 : 1;
   const viewKey = `${step}-${department?.slug ?? ""}-${position?.id ?? ""}`;
@@ -297,7 +297,7 @@ function PositionList({ department }: { department: Department }) {
           <Link
             key={p.id}
             to="/careers"
-            search={{ dept: department.slug, job: p.id }}
+            search={{ dept: department.slug, job: Number(p.id) }}
             resetScroll={false}
             data-item
             className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-card"
