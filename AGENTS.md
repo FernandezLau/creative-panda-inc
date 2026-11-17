@@ -33,3 +33,5 @@ use the editor.
 - Site content (projects, systems, clients, links) lives in `src/components/site/data.ts`; the page in `src/routes/index.tsx` only renders it — keeps copy edits in one place.
 - Portfolio images are hotlinked from mycreativepanda.com's WordPress uploads — they are the client's own assets and stay in sync with their portfolio.
 - Page motion runs through `src/components/site/use-site-animations.ts` (Anime.js, dynamically imported in an effect) driven by `data-hero`, `data-reveal`, `data-reveal-group`, `data-count`, `data-float` attributes — keeps animation out of SSR and out of the markup logic.
+- Careers (`/careers`) reads open positions from the HR system only inside a server function (`src/lib/careers.functions.ts`), and `src/lib/careers.ts` validates and strips HTML from every field — feed text is rendered as React text, never injected as HTML, and Apply links are built only from numeric ids over HTTPS.
+- The site header and footer live in `src/components/site/site-chrome.tsx` so every page shares them; homepage section links use `/#section` so they work from other pages.
