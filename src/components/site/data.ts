@@ -6,11 +6,11 @@ export const YOUTUBE_URL = "https://www.youtube.com/@mycreativepanda8598";
 export const SALES_EMAIL = "sales@mycreativepanda.com";
 
 export const nav = [
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Work", href: "#work" },
-  { label: "Systems", href: "#systems" },
-  { label: "Careers", href: "#careers" },
+  { label: "About", href: "/#about" },
+  { label: "Services", href: "/#services" },
+  { label: "Work", href: "/#work" },
+  { label: "Systems", href: "/#systems" },
+  { label: "Careers", href: "/careers" },
 ];
 
 export const projects = [
@@ -54,3 +54,26 @@ export const clients = [
 export const GREETING_COVER = `${C}/29/GREET1-1-2984601f.png`;
 
 export const greetings = ["TESDA Region III", "Arayat, Pampanga", "Talavera, Nueva Ecija", "Concepcion"];
+
+/* ---------------- Careers ---------------- */
+
+/** HR system feed of open positions (read on the server only, always over HTTPS). */
+export const CAREERS_API_URL = "https://mcpehris.mycreativepanda.ph/api/vacant_positions";
+/** Secure HR portal where applicants finish their application. */
+export const CAREERS_APPLY_URL = "https://mcpehris.mycreativepanda.ph/online-job-application/";
+
+const U = "https://mycreativepanda.com/wp-content/uploads";
+/** Photo shown for each department (matched loosely by name, like the old WordPress page). */
+export const departmentImages: { match: string; img: string }[] = [
+  { match: "ADMIN DEPARTMENT", img: `${U}/2025/05/Untitled-design-17.png` },
+  { match: "SALES AND MARKETING DEPARTMENT", img: `${U}/2026/04/finance-img-scaled.jpg` },
+  { match: "TECHNICAL SUPPORT DEPARTMENT", img: `${U}/2025/05/Untitled-design-20.png` },
+  { match: "SUPPORT DEPARTMENT", img: `${U}/2025/05/Untitled-design-20.png` },
+  { match: "FINANCE DEPARTMENT", img: `${U}/2026/04/finance.png` },
+  { match: "HUMAN RESOURCE DEPARTMENT", img: `${U}/2026/04/hr-image-scaled.jpg` },
+];
+export const DEFAULT_DEPARTMENT_IMAGE = `${U}/2026/04/hr-image-scaled.jpg`;
+/** Department names in the HR feed that mean the same team. */
+export const departmentAliases: Record<string, string> = {
+  "HR DEPARTMENT": "HUMAN RESOURCE DEPARTMENT",
+};
