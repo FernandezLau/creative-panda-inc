@@ -4,10 +4,13 @@ import { Button } from "@/components/ui/button";
 import { LOGO_URL, YOUTUBE_URL, nav } from "@/components/site/data";
 
 /** Menu link: real pages go through the router, homepage sections use plain anchors. */
+const pages = ["/careers", "/portfolio", "/products"] as const;
+const isPage = (href: string): href is (typeof pages)[number] => (pages as readonly string[]).includes(href);
+
 function NavLink({ href, className, children }: { href: string; className: string; children: ReactNode }) {
-  if (href === "/careers") {
+  if (isPage(href)) {
     return (
-      <Link to="/careers" className={className} activeProps={{ className: "text-accent" }}>
+      <Link to={href} className={className} activeProps={{ className: "text-accent" }}>
         {children}
       </Link>
     );

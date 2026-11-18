@@ -8,8 +8,8 @@ export const SALES_EMAIL = "sales@mycreativepanda.com";
 export const nav = [
   { label: "About", href: "/#about" },
   { label: "Services", href: "/#services" },
-  { label: "Work", href: "/#work" },
-  { label: "Systems", href: "/#systems" },
+  { label: "Work", href: "/portfolio" },
+  { label: "Systems", href: "/products" },
   { label: "Careers", href: "/careers" },
 ];
 

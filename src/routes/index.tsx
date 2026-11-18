@@ -27,6 +27,7 @@ import digitalHero from "@/assets/digital-hero.jpg";
 import { useSiteAnimations } from "@/components/site/use-site-animations";
 import { SpotlightCard } from "@/components/site/spotlight-card";
 import { SiteFooter, SiteHeader, TechTag } from "@/components/site/site-chrome";
+import { BrowserBar, Corners, host } from "@/components/site/tech-bits";
 import {
   GREETING_COVER,
   LOGO_URL,
@@ -222,41 +223,6 @@ function SectionHead({
   );
 }
 
-function Corners() {
-  const base = "pointer-events-none absolute h-4 w-4 border-accent transition-all duration-300 group-hover:h-6 group-hover:w-6";
-  return (
-    <>
-      <span aria-hidden className={`${base} left-3 top-3 border-l-2 border-t-2`} />
-      <span aria-hidden className={`${base} right-3 top-3 border-r-2 border-t-2`} />
-      <span aria-hidden className={`${base} bottom-3 left-3 border-b-2 border-l-2`} />
-      <span aria-hidden className={`${base} bottom-3 right-3 border-b-2 border-r-2`} />
-    </>
-  );
-}
-
-function BrowserBar({ url, dark }: { url: string; dark?: boolean }) {
-  return (
-    <div
-      className={`flex items-center gap-1.5 border-b px-4 py-2.5 ${
-        dark ? "border-forest-foreground/10 bg-forest-deep/80" : "border-border bg-card"
-      }`}
-    >
-      <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
-      <span className="h-2.5 w-2.5 rounded-full bg-chart-4/80" />
-      <span className="h-2.5 w-2.5 rounded-full bg-accent" />
-      <span
-        className={`ml-3 flex min-w-0 items-center gap-1.5 truncate rounded-full px-3 py-0.5 text-xs ${
-          dark ? "bg-forest-foreground/10 text-forest-foreground/60" : "bg-muted text-muted-foreground"
-        }`}
-      >
-        <Lock className="h-3 w-3 shrink-0" />
-        <span className="truncate">{url}</span>
-      </span>
-    </div>
-  );
-}
-
-const host = (u: string) => u.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
 /* ---------------- About ---------------- */
 
@@ -457,9 +423,9 @@ function Work() {
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <SectionHead dark index="04" eyebrow="Latest website projects" title={<>Proudly powering towns <span className="accent-italic text-accent text-glow">across the islands.</span></>} />
           <Button asChild variant="lime" size="xl">
-            <a href="https://mycreativepanda.com/portfolio/">
+            <Link to="/portfolio">
               See all portfolio <ArrowRight />
-            </a>
+            </Link>
           </Button>
         </div>
 
@@ -481,7 +447,7 @@ function ProjectCard({ p, large }: { p: (typeof projects)[number]; large?: boole
     <a
       href={p.url}
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer"
       className={`group block overflow-hidden rounded-2xl border border-forest-foreground/15 bg-forest transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-lime ${large ? "mt-16" : ""}`}
     >
       <BrowserBar url={host(p.url)} dark />
@@ -537,11 +503,14 @@ function Systems() {
             </figure>
           ))}
         </div>
-        <div className="mt-14">
+        <div className="mt-14 flex flex-wrap gap-4">
           <Button asChild variant="ink" size="xl">
-            <a href="https://mycreativepanda.com/portfolio/">
-              View all our partners <ArrowRight />
-            </a>
+            <Link to="/portfolio" search={{ view: "software" }}>
+              See all client systems <ArrowRight />
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="xl" className="rounded-full bg-transparent font-semibold">
+            <Link to="/products">Explore our products</Link>
           </Button>
         </div>
       </div>
@@ -597,13 +566,13 @@ function Greetings() {
           and leave everyone inspired.
         </SectionHead>
         <Button asChild variant="ink" size="xl">
-          <a href={YOUTUBE_URL} target="_blank" rel="noreferrer">
+          <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer">
             Watch on YouTube <Play />
           </a>
         </Button>
       </div>
       <div data-reveal-group className="mt-16 grid items-stretch gap-6 lg:grid-cols-5">
-        <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-3xl bg-forest ring-1 ring-border transition-shadow hover:glow-ring lg:col-span-3">
+        <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="group relative block overflow-hidden rounded-3xl bg-forest ring-1 ring-border transition-shadow hover:glow-ring lg:col-span-3">
           <img src={GREETING_COVER} alt="Collage of client video greetings" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
           <span className="absolute left-6 top-6 grid h-16 w-16 place-items-center rounded-full bg-accent text-accent-foreground shadow-lime transition-transform group-hover:scale-110">
             <span aria-hidden className="absolute inset-0 animate-ping rounded-full bg-accent/50" />
@@ -616,7 +585,7 @@ function Greetings() {
         <ul className="flex flex-col divide-y divide-border overflow-hidden rounded-3xl border border-border bg-card lg:col-span-2">
           {greetings.map((g, i) => (
             <li key={g} className="flex-1">
-              <a href={YOUTUBE_URL} target="_blank" rel="noreferrer" className="group flex h-full items-center justify-between gap-4 px-8 py-7 transition-colors hover:bg-forest-deep hover:text-forest-foreground">
+              <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="group flex h-full items-center justify-between gap-4 px-8 py-7 transition-colors hover:bg-forest-deep hover:text-forest-foreground">
                 <span className="flex items-baseline gap-4">
                   <span className="font-display text-sm text-muted-foreground group-hover:text-accent">0{i + 1}</span>
                   <span className="font-display text-2xl font-bold">{g}</span>
