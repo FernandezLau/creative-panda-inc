@@ -128,3 +128,24 @@ export function useSiteAnimations(rootRef: RefObject<HTMLElement | null>) {
     };
   }, [rootRef]);
 }
+
+/**
+ * Re-plays a short staggered rise on `[data-item]` children of `ref` whenever `key` changes
+ * (filters, tabs, steps). Only the first `limit` items animate so long grids stay snappy.
+ */
+export function useStaggerIn(ref: RefObject<HTMLElement | null>, key: string, limit = 12) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let cancelled = false;
+    void import("animejs").then(({ animate, stagger }) => {
+      if (cancelled) return;
+      const items = Array.from(el.querySelectorAll<HTMLElement>("[data-item]")).slice(0, limit);
+      if (items.length) animate(items, { opacity: [0, 1], y: [28, 0], delay: stagger(50), duration: 700, ease: "outExpo" });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [ref, key, limit]);
+}
