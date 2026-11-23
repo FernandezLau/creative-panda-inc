@@ -24,9 +24,10 @@ import {
 import { useRef, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import digitalHero from "@/assets/digital-hero.jpg";
+import mobileReadyTalibon from "@/assets/mobile_ready_talibon.png";
 import { useSiteAnimations } from "@/components/site/use-site-animations";
 import { SpotlightCard } from "@/components/site/spotlight-card";
-import { SiteFooter, SiteHeader, TechTag } from "@/components/site/site-chrome";
+import { SiteFooter, TechTag } from "@/components/site/site-chrome";
 import { BrowserBar, Corners, host } from "@/components/site/tech-bits";
 import {
   GREETING_COVER,
@@ -118,8 +119,6 @@ function Hero() {
         />
       ))}
 
-      <SiteHeader />
-
       <div className="mx-auto max-w-7xl px-6 pb-24 pt-16 lg:px-10 lg:pb-32 lg:pt-24">
         <p data-hero="eyebrow" className="eyebrow text-accent">
           Web design & development · Est. 2006
@@ -197,20 +196,18 @@ function ClientMarquee() {
 
 function SectionHead({
   eyebrow,
-  index,
   title,
   dark,
   children,
 }: {
   eyebrow: string;
-  index?: string;
   title: ReactNode;
   dark?: boolean;
   children?: ReactNode;
 }) {
   return (
     <div data-reveal className="max-w-3xl">
-      <TechTag index={index} dark={dark}>
+      <TechTag dark={dark}>
         {eyebrow}
       </TechTag>
       <h2 className="mt-6 text-4xl font-bold leading-[1.02] sm:text-6xl">{title}</h2>
@@ -233,7 +230,7 @@ function About() {
       <div className="mx-auto grid max-w-7xl gap-16 px-6 py-28 lg:grid-cols-12 lg:px-10">
         <div className="lg:col-span-5">
           <div data-reveal>
-            <TechTag index="01">Who are we?</TechTag>
+            <TechTag>Who are we?</TechTag>
             <h2 className="mt-6 text-4xl font-bold leading-[1.02] sm:text-6xl">
               From business cards to <span className="accent-italic text-primary">city portals.</span>
             </h2>
@@ -286,9 +283,9 @@ function About() {
             Our clients were so happy with our service that they recommended us to their friends. That's
             what keeps us pursuing what we wanted in the first place.
           </p>
-          <a href="https://mycreativepanda.com/about-us/" className="inline-flex items-center gap-2 font-semibold text-foreground underline decoration-accent decoration-4 underline-offset-8 hover:text-primary">
+          <Link to="/about" className="inline-flex items-center gap-2 font-semibold text-foreground underline decoration-accent decoration-4 underline-offset-8 hover:text-primary">
             Read our story <ArrowUpRight className="h-4 w-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>
@@ -314,7 +311,7 @@ function Services() {
       <div aria-hidden className="absolute -left-40 bottom-0 -z-10 h-80 w-80 rounded-full bg-primary/30 blur-3xl" />
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <SectionHead dark index="02" eyebrow="Services we offer" title={<>Where imagination takes <span className="accent-italic text-accent text-glow">vibrant form.</span></>}>
+          <SectionHead dark eyebrow="Services we offer" title={<>Where imagination takes <span className="accent-italic text-accent text-glow">vibrant form.</span></>}>
             Tailored services that turn your ideas into a digital home — welcome to endless creativity and
             limitless possibilities.
           </SectionHead>
@@ -376,7 +373,7 @@ function Responsive() {
             </div>
           </div>
           <div className="absolute -bottom-10 right-6 w-32 overflow-hidden rounded-2xl border-4 border-foreground bg-card shadow-lift sm:w-40">
-            <img src={projects[4].img} alt="National Academy of Sports website on mobile" loading="lazy" className="aspect-[9/16] w-full object-cover object-left-top" />
+            <img src={mobileReadyTalibon} alt="Talibon website on mobile" loading="lazy" className="aspect-[9/16] w-full object-cover object-left-top" />
           </div>
           <div className="absolute -left-4 bottom-8 flex items-center gap-2 rounded-full bg-forest-deep px-4 py-2 text-xs font-semibold text-forest-foreground shadow-lift">
             <span className="relative flex h-2 w-2">
@@ -388,7 +385,7 @@ function Responsive() {
         </div>
 
         <div>
-          <SectionHead index="03" eyebrow="Built for every screen" title={<>Digital experiences that <span className="accent-italic text-primary">adapt to you.</span></>}>
+          <SectionHead eyebrow="Built for every screen" title={<>Digital experiences that <span className="accent-italic text-primary">adapt to you.</span></>}>
             From smartphones to desktops, every site we ship adapts flawlessly to the screen — easy
             navigation and visually stunning content, wherever your visitors are.
           </SectionHead>
@@ -421,7 +418,7 @@ function Work() {
       <div aria-hidden className="absolute left-1/2 top-0 -z-10 h-72 w-[48rem] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <SectionHead dark index="04" eyebrow="Latest website projects" title={<>Proudly powering towns <span className="accent-italic text-accent text-glow">across the islands.</span></>} />
+          <SectionHead dark eyebrow="Latest website projects" title={<>Proudly powering towns <span className="accent-italic text-accent text-glow">across the islands.</span></>} />
           <Button asChild variant="lime" size="xl">
             <Link to="/portfolio">
               See all portfolio <ArrowRight />
@@ -480,7 +477,7 @@ function Systems() {
     <section id="systems" className="relative isolate overflow-hidden">
       <div aria-hidden className="absolute inset-0 -z-10 bg-circuit-light" />
       <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
-        <SectionHead index="05" eyebrow="Trusted partnerships" title={<>Systems that keep <span className="accent-italic text-primary">institutions running.</span></>}>
+        <SectionHead eyebrow="Trusted partnerships" title={<>Systems that keep <span className="accent-italic text-primary">institutions running.</span></>}>
           We proudly introduce the partners who have been instrumental in our journey and continue to
           contribute to our shared success.
         </SectionHead>
@@ -531,7 +528,7 @@ function WhyUs() {
       <div aria-hidden className="absolute inset-0 -z-10 bg-grid-ink" />
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <p data-reveal className="eyebrow inline-flex items-center gap-2.5 rounded-full border border-accent-foreground/25 px-3.5 py-1.5">
-          <span className="h-2 w-2 rounded-full bg-accent-foreground" /> 06 / Why My Creative Panda
+          <span className="h-2 w-2 rounded-full bg-accent-foreground" /> Why My Creative Panda
         </p>
         <h2 data-reveal className="mt-6 max-w-4xl text-4xl font-bold leading-[1.02] sm:text-6xl">
           The myriad benefits of <span className="accent-italic">choosing the panda.</span>
@@ -561,7 +558,7 @@ function Greetings() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
       <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-        <SectionHead index="07" eyebrow="Greetings for our clients" title={<>Video greetings, <span className="accent-italic text-primary">brought to life.</span></>}>
+        <SectionHead eyebrow="Greetings for our clients" title={<>Video greetings, <span className="accent-italic text-primary">brought to life.</span></>}>
           A visual treat from the Creative Panda team, made for our esteemed clients to spark imagination
           and leave everyone inspired.
         </SectionHead>
@@ -611,7 +608,7 @@ function JoinAndSupport() {
         <article className="relative isolate flex flex-col justify-between overflow-hidden rounded-[2rem] border border-border bg-secondary p-10 lg:p-14">
           <div aria-hidden className="absolute inset-0 -z-10 bg-circuit-light" />
           <div>
-            <TechTag index="08">Careers</TechTag>
+            <TechTag>Careers</TechTag>
             <h3 className="mt-6 text-4xl font-bold">Join our community.</h3>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-muted-foreground">
               We'd love you to join our vibrant, imaginative community of developers and professionals.
@@ -631,7 +628,7 @@ function JoinAndSupport() {
           <div aria-hidden className="absolute inset-0 -z-10 bg-tech-grid-fine" />
           <div aria-hidden className="absolute -right-20 -top-20 -z-10 h-72 w-72 rounded-full bg-accent/25 blur-3xl" />
           <div>
-            <TechTag dark index="09">Support & projects</TechTag>
+            <TechTag dark>Support & projects</TechTag>
             <h3 className="mt-6 text-4xl font-bold">Looking for support?</h3>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-forest-foreground/75">
               Reliable IT infrastructure is vital to your success. We work closely with you to design

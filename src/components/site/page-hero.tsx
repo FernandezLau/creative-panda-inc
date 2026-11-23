@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { SiteHeader } from "@/components/site/site-chrome";
 
 type Stat = { v: number; s?: string; l: string };
 
@@ -30,7 +29,6 @@ export function PageHero({
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-full overflow-hidden">
         <div className="scan-beam absolute inset-x-0 h-24 animate-scan opacity-40" />
       </div>
-      <SiteHeader />
       <div className="mx-auto max-w-7xl px-6 pb-20 pt-12 lg:px-10 lg:pb-24 lg:pt-20">
         <p data-hero="eyebrow" className="eyebrow inline-flex items-center gap-2.5 rounded-full border border-accent/30 bg-accent/10 px-3.5 py-1.5 text-accent">
           <span className="relative flex h-2 w-2">

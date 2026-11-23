@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SpotlightCard } from "@/components/site/spotlight-card";
-import { SiteFooter, SiteHeader, TechTag } from "@/components/site/site-chrome";
+import { SiteFooter, TechTag } from "@/components/site/site-chrome";
 import { useSiteAnimations } from "@/components/site/use-site-animations";
 import { SALES_EMAIL } from "@/components/site/data";
 import { getOpenPositions } from "@/lib/careers.functions";
@@ -89,7 +89,6 @@ function CareersHero({ roles, teams }: { roles: number; teams: number }) {
       <div aria-hidden className="absolute inset-0 -z-10 bg-tech-grid-fine" />
       <div aria-hidden className="absolute -left-32 top-10 -z-10 h-96 w-96 rounded-full bg-accent/20 blur-3xl" />
       <div aria-hidden className="absolute -right-20 bottom-0 -z-10 h-80 w-80 rounded-full bg-primary/40 blur-3xl" />
-      <SiteHeader />
       <div className="mx-auto grid max-w-7xl gap-12 px-6 pb-24 pt-12 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:px-10 lg:pt-20">
         <div data-reveal>
           <TechTag dark>We're hiring</TechTag>
@@ -177,7 +176,7 @@ function Finder({ departments, positions, failed }: { departments: Department[];
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div data-reveal className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <TechTag index="01">Open positions</TechTag>
+            <TechTag>Open positions</TechTag>
             <h2 className="mt-6 text-4xl font-bold leading-[1.02] sm:text-6xl">
               Find your <span className="accent-italic text-primary">place.</span>
             </h2>

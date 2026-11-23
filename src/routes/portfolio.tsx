@@ -104,7 +104,7 @@ function Projects() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div data-reveal className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
-            <TechTag index="01">All client projects</TechTag>
+            <TechTag>All client projects</TechTag>
             <h2 className="mt-6 text-4xl font-bold leading-[1.02] sm:text-6xl">
               Proudly powering <span className="accent-italic text-primary">the Philippines.</span>
             </h2>

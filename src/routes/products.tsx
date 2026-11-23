@@ -80,7 +80,7 @@ function Catalog() {
       <div aria-hidden className="absolute inset-0 -z-10 bg-circuit-light" />
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div data-reveal className="max-w-3xl">
-          <TechTag index="01">System catalog</TechTag>
+          <TechTag>System catalog</TechTag>
           <h2 className="mt-6 text-4xl font-bold leading-[1.02] sm:text-6xl">
             Built for the way <span className="accent-italic text-primary">public service works.</span>
           </h2>

@@ -1,10 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LOGO_URL, YOUTUBE_URL, nav } from "@/components/site/data";
 
 /** Menu link: real pages go through the router, homepage sections use plain anchors. */
-const pages = ["/careers", "/portfolio", "/products"] as const;
+const pages = ["/about", "/careers", "/portfolio", "/products"] as const;
 const isPage = (href: string): href is (typeof pages)[number] => (pages as readonly string[]).includes(href);
 
 function NavLink({ href, className, children }: { href: string; className: string; children: ReactNode }) {
@@ -24,26 +25,56 @@ function NavLink({ href, className, children }: { href: string; className: strin
 
 export function SiteHeader() {
   return (
-    <header className="relative z-20 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
-      <Link to="/" className="flex items-center gap-3">
-        <img src={LOGO_URL} alt="My Creative Panda logo" width={44} height={44} className="h-11 w-11 rounded-full bg-forest-foreground p-0.5" />
-        <span className="font-display text-lg font-bold tracking-tight text-forest-foreground">My Creative Panda</span>
-      </Link>
-      <nav className="hidden items-center gap-8 md:flex">
-        {nav.map((n) => (
-          <NavLink key={n.href} href={n.href} className="text-sm font-medium text-forest-foreground/80 transition-colors hover:text-accent">
-            {n.label}
-          </NavLink>
-        ))}
-      </nav>
-      <Button asChild variant="lime" size="lg">
-        <a href="/#contact">Contact us</a>
-      </Button>
+    <header className="sticky top-0 z-50 w-full border-b border-forest-foreground/10 bg-forest-deep/95 backdrop-blur-md">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
+        <Link to="/" className="flex items-center gap-3">
+          <img src={LOGO_URL} alt="My Creative Panda logo" width={44} height={44} className="h-11 w-11 rounded-full bg-forest-foreground p-0.5" />
+          <span className="font-display text-lg font-bold tracking-tight text-forest-foreground">My Creative Panda</span>
+        </Link>
+        <nav className="hidden items-center gap-8 md:flex">
+          {nav.map((n) => (
+            <NavLink key={n.href} href={n.href} className="text-sm font-medium text-forest-foreground/80 transition-colors hover:text-accent">
+              {n.label}
+            </NavLink>
+          ))}
+        </nav>
+        <Button asChild variant="lime" size="lg">
+          <a href="/#contact">Contact us</a>
+        </Button>
+      </div>
     </header>
   );
 }
 
-export function TechTag({ children, index, dark }: { children: ReactNode; index?: string | undefined; dark?: boolean | undefined }) {
+export function ScrollToTopButton() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setVisible(window.scrollY > 320);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  if (!visible) return null;
+
+  return (
+    <Button
+      type="button"
+      variant="lime"
+      size="icon"
+      aria-label="Scroll back to top"
+      className="fixed bottom-6 right-6 z-50 h-12 w-12 shadow-lift"
+      onClick={() => {
+        const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+        window.scrollTo({ top: 0, behavior });
+      }}
+    >
+      <ArrowUp aria-hidden="true" />
+    </Button>
+  );
+}
+
+export function TechTag({ children, dark }: { children: ReactNode; dark?: boolean | undefined }) {
   return (
     <p
       className={`eyebrow inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 ${
@@ -54,7 +85,6 @@ export function TechTag({ children, index, dark }: { children: ReactNode; index?
         <span className="absolute inset-0 animate-ping rounded-full bg-current opacity-60" />
         <span className="relative h-2 w-2 rounded-full bg-current" />
       </span>
-      {index && <span className="opacity-60">{index} /</span>}
       {children}
     </p>
   );
